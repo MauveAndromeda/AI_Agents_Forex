@@ -154,7 +154,36 @@ DEEPSEEK_API_KEY=sk-xxxxx
 
 ## 🎯 Quick Start
 
-### Run Quick Backtest (Last 3 Months)
+### One-Click Enhanced Backtest (NEW - For vast.ai / No MT5 Required)
+
+**Perfect for vast.ai PyTorch Jupyter environments!**
+
+```bash
+# Basic backtest with GPT-4o-mini (fast & cheap)
+python backtest_enhanced_one_click.py --llm gpt-4o-mini
+
+# With Claude Sonnet 4.5 (highest quality)
+python backtest_enhanced_one_click.py --llm claude-sonnet-4.5
+
+# Custom options
+python backtest_enhanced_one_click.py \
+    --llm gpt-4o \
+    --symbols EURUSD GBPUSD USDJPY \
+    --balance 25000 \
+    --leverage 50 \
+    --duration 90
+```
+
+**Features:**
+- ✅ Works without MT5 (uses simulated data)
+- ✅ Tests ALL 2025 AI enhancements (microstructure, RL, LLM, adaptive learning)
+- ✅ Choose your LLM: `gpt-4o-mini`, `gpt-4o`, `claude-sonnet-4.5`, `deepseek`, `gemini`
+- ✅ Comprehensive results with AI component analysis
+- ✅ Saves detailed JSON reports
+
+**See [BACKTEST_GUIDE.md](BACKTEST_GUIDE.md) for complete instructions.**
+
+### Run Quick Backtest (Requires MT5)
 ```bash
 python quick_backtest.py
 ```
