@@ -176,7 +176,9 @@ python backtest_enhanced_one_click.py \
 
 **Features:**
 - ✅ Works without MT5 (uses simulated data)
-- ✅ Tests ALL 2025 AI enhancements (microstructure, RL, LLM, adaptive learning)
+- ✅ Tests **ALL 8 AI components**: Original 4-agent system + 2025 enhancements
+  - **Original**: TechnicalAnalyst, RiskManager, Sentiment, Execution agents
+  - **2025**: Microstructure, RL, Advanced LLM, Adaptive Learning
 - ✅ Choose your LLM: `gpt-4o-mini`, `gpt-4o`, `claude-sonnet-4.5`, `deepseek`, `gemini`
 - ✅ Comprehensive results with AI component analysis
 - ✅ Saves detailed JSON reports

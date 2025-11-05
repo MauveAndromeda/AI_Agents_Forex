@@ -87,9 +87,37 @@ python backtest_enhanced_one_click.py \
 
 ## What Gets Tested
 
-The backtest comprehensively tests all 2025 AI enhancements:
+The backtest comprehensively tests **ALL AI AGENTS** - both original and 2025 enhancements:
 
-### 1. Market Microstructure Analysis ✓
+### Original Multi-Agent System (4 Agents) ✓
+
+1. **TechnicalAnalystAgent** ✓
+   - Analyzes 100+ alpha factors
+   - Aggregates signals by category (Momentum, Reversal, Trend, etc.)
+   - Calculates overall technical score
+   - Uses LLM for enhanced reasoning
+
+2. **RiskManagerAgent** ✓
+   - ATR-based stop loss calculation
+   - Support/resistance-aware stop placement
+   - Position size validation
+   - Risk-reward ratio enforcement (min 1.5:1)
+   - Drawdown-adjusted sizing
+
+3. **SentimentAnalystAgent** ✓
+   - Market sentiment evaluation
+   - News integration (when available)
+   - Sentiment-based confidence adjustment
+
+4. **ExecutionAgent** ✓
+   - Final trade approval
+   - Multi-timeframe agreement verification
+   - Risk-reward validation
+   - Confidence threshold enforcement
+
+### 2025 AI Enhancements (4 New Components) ✓
+
+1. **Market Microstructure Analysis** ✓
 - Retail vs institutional flow detection
 - **Fade retail sentiment** (contrarian strategy)
 - **Follow institutional flow** (smart money)
@@ -165,13 +193,20 @@ Data Source: Simulated
 
 ✓ Simulated data generator initialized
 ✓ Alpha factors initialized (100+ factors, cached)
-✓ Market microstructure analyzer initialized
-✓ High-leverage risk manager initialized (50x specific)
-✓ LLM agent initialized (gpt-4o-mini)
+✓ LLM client initialized (gpt-4o-mini)
+✓ Multi-Agent System initialized (4 agents: Technical, Risk, Sentiment, Execution)
+✓ Market microstructure analyzer initialized (retail vs institutional)
 ✓ RL agent initialized (Q-learning)
+✓ Advanced LLM agent initialized (chain-of-thought reasoning)
 ✓ Adaptive learning system initialized
+✓ High-leverage risk manager initialized (50x specific)
 
 All systems initialized. Starting backtest...
+
+SYSTEM ARCHITECTURE:
+- Original Multi-Agent System (4 agents) -> Base trading decision
+- 2025 AI Enhancements (4 components) -> Enhance and validate decision
+- Total: 8 AI components working together
 
 ============================================================
 TESTING SYMBOL: EURUSD

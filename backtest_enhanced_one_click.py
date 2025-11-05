@@ -34,6 +34,7 @@ import numpy as np
 # Import project modules
 from src.data.simulated_data_generator import SimulatedMT5Connector, SimulatedDataGenerator
 from src.models.forex_alpha_factors_optimized import ForexAlphaFactorsOptimized
+from src.agents.trading_agents import MultiAgentTradingSystem, TradeDirection
 from src.agents.market_microstructure import MarketMicrostructureAnalyzer
 from src.agents.ai_enhancements_2025 import (
     ReinforcementLearningAgent,
@@ -106,28 +107,24 @@ class EnhancedBacktester:
         self.alpha_factors = ForexAlphaFactorsOptimized(enable_cache=True, cache_ttl=60)
         logger.info("✓ Alpha factors initialized (100+ factors, cached)")
 
-        self.microstructure = MarketMicrostructureAnalyzer()
-        logger.info("✓ Market microstructure analyzer initialized")
-
-        self.risk_manager = HighLeverageRiskManager(
-            account_balance=initial_balance,
-            leverage=leverage,
-            max_risk_per_trade=0.005,  # 0.5%
-            max_positions=2,
-            max_daily_loss=0.02,
-            max_drawdown=0.05
-        )
-        logger.info("✓ High-leverage risk manager initialized (50x specific)")
-
         # AI components
         try:
             self.llm_client = self._create_llm_client(llm_provider)
-            self.llm_agent = AdvancedLLMAgent(self.llm_client)
-            logger.info(f"✓ LLM agent initialized ({llm_provider})")
+            logger.info(f"✓ LLM client initialized ({llm_provider})")
         except Exception as e:
             logger.warning(f"LLM initialization failed: {e}. Running without LLM.")
             self.llm_client = None
-            self.llm_agent = None
+
+        # ORIGINAL Multi-Agent Trading System (4 agents)
+        self.multi_agent_system = MultiAgentTradingSystem(
+            llm_client=self.llm_client,
+            min_confidence=0.4
+        )
+        logger.info("✓ Multi-Agent System initialized (4 agents: Technical, Risk, Sentiment, Execution)")
+
+        # 2025 AI ENHANCEMENTS
+        self.microstructure = MarketMicrostructureAnalyzer()
+        logger.info("✓ Market microstructure analyzer initialized (retail vs institutional)")
 
         self.rl_agent = ReinforcementLearningAgent(
             state_dim=50,
@@ -138,8 +135,22 @@ class EnhancedBacktester:
         )
         logger.info("✓ RL agent initialized (Q-learning)")
 
+        self.llm_agent = AdvancedLLMAgent(self.llm_client) if self.llm_client else None
+        if self.llm_agent:
+            logger.info("✓ Advanced LLM agent initialized (chain-of-thought reasoning)")
+
         self.adaptive_system = AdaptiveLearningSystem()
         logger.info("✓ Adaptive learning system initialized")
+
+        self.risk_manager = HighLeverageRiskManager(
+            account_balance=initial_balance,
+            leverage=leverage,
+            max_risk_per_trade=0.005,  # 0.5%
+            max_positions=2,
+            max_daily_loss=0.02,
+            max_drawdown=0.05
+        )
+        logger.info("✓ High-leverage risk manager initialized (50x specific)")
 
         # Tracking
         self.trades = []
@@ -249,39 +260,85 @@ class EnhancedBacktester:
         logger.info(f"Completed {len([t for t in self.trades if t['symbol'] == symbol])} trades on {symbol}")
 
     def _generate_signal(self, symbol: str, data: Dict[str, pd.DataFrame]) -> Optional[Dict]:
-        """Generate trading signal using all AI components"""
+        """
+        Generate trading signal using COMPLETE AI system
+
+        Flow:
+        1. Original Multi-Agent System (4 agents) -> Base decision
+        2. 2025 AI Enhancements -> Enhance/validate decision
+        """
         try:
             # 1. Calculate alpha factors
             alpha_signals = self.alpha_factors.calculate_all_factors(data, symbol)
             alpha_score = np.mean([s.score for s in alpha_signals]) if alpha_signals else 0.0
 
-            # 2. Market microstructure analysis
             primary_df = data.get('H1')
+            current_price = float(primary_df['Close'].iloc[-1])
+
+            # ==========================================
+            # STEP 1: ORIGINAL MULTI-AGENT SYSTEM
+            # ==========================================
+            # This runs the 4-agent system:
+            # - TechnicalAnalystAgent: Analyzes alpha signals
+            # - RiskManagerAgent: Evaluates risk and sets stops
+            # - SentimentAnalystAgent: Analyzes market sentiment
+            # - ExecutionAgent: Final approval decision
+
+            account_info = {
+                'balance': self.current_equity,
+                'equity': self.current_equity
+            }
+
+            base_decision = self.multi_agent_system.analyze_and_decide(
+                symbol=symbol,
+                data=data,
+                alpha_signals=alpha_signals,
+                account_info=account_info,
+                current_positions=len(self.trades),
+                account_can_trade=True,
+                news=None
+            )
+
+            # If base system says no trade, respect that
+            if base_decision is None or base_decision.direction == TradeDirection.NEUTRAL:
+                logger.debug(f"{symbol}: Multi-agent system says no trade")
+                return None
+
+            # Convert base decision
+            base_direction = 'BUY' if base_decision.direction == TradeDirection.LONG else 'SELL'
+            base_confidence = base_decision.confidence
+
+            # ==========================================
+            # STEP 2: 2025 AI ENHANCEMENTS
+            # ==========================================
+
+            # 2A. Market microstructure analysis (retail vs institutional)
             order_flow = self.microstructure.analyze_order_flow(
                 primary_df,
                 symbol=symbol,
                 timeframe='H1'
             )
 
-            # 3. RL agent decision
+            # 2B. RL agent decision
             state = self.rl_agent.extract_state_features(data, alpha_signals, order_flow)
             rl_action = 0
             if state:
                 rl_action = self.rl_agent.select_action(state, training=True)
 
-            # 4. Adaptive learning check
+            # 2C. Adaptive learning check
             conditions = {
                 'alpha_score': round(alpha_score, 1),
                 'retail_sentiment': round(order_flow.retail_sentiment, 1) if order_flow else 0.0,
                 'institutional_flow': round(order_flow.institutional_sentiment, 1) if order_flow else 0.0
             }
 
-            should_trade, confidence = self.adaptive_system.should_trade_in_conditions(conditions)
+            should_trade, adaptive_confidence = self.adaptive_system.should_trade_in_conditions(conditions)
 
             if not should_trade:
+                logger.debug(f"{symbol}: Adaptive learning says avoid these conditions")
                 return None
 
-            # 5. LLM reasoning (if available)
+            # 2D. Advanced LLM reasoning (if available)
             llm_decision = None
             if self.llm_agent:
                 try:
@@ -296,36 +353,48 @@ class EnhancedBacktester:
                 except Exception as e:
                     logger.debug(f"LLM analysis skipped: {e}")
 
-            # 6. Combine signals
-            direction, conviction = self._combine_signals(
+            # ==========================================
+            # STEP 3: COMBINE ALL SIGNALS
+            # ==========================================
+
+            # Combine base decision with 2025 enhancements
+            final_direction, final_conviction = self._combine_all_signals(
+                base_direction=base_direction,
+                base_confidence=base_confidence,
                 alpha_score=alpha_score,
                 retail_sentiment=order_flow.retail_sentiment if order_flow else 0.0,
                 institutional_flow=order_flow.institutional_sentiment if order_flow else 0.0,
                 rl_action=rl_action,
-                llm_decision=llm_decision
+                llm_decision=llm_decision,
+                adaptive_confidence=adaptive_confidence
             )
 
-            if direction == 'HOLD' or conviction < 0.4:
+            if final_direction == 'HOLD' or final_conviction < 0.4:
                 return None
 
-            # 7. Calculate position size
-            current_price = float(primary_df['Close'].iloc[-1])
-            stop_loss_pips = 15  # Max for 50x
+            # ==========================================
+            # STEP 4: POSITION SIZING (High-leverage specific)
+            # ==========================================
+
+            stop_loss_pips = 15  # Max for 50x leverage
 
             position_size = self.risk_manager.calculate_position_size(
                 symbol=symbol,
                 entry_price=current_price,
                 stop_loss_pips=stop_loss_pips,
-                direction=direction
+                direction=final_direction
             )
 
             if position_size == 0:
                 return None
 
+            logger.info(f"  SIGNAL: {final_direction} {symbol} | Conviction: {final_conviction:.2%} | "
+                       f"Base: {base_confidence:.2%} | Adaptive: {adaptive_confidence:.2%}")
+
             return {
                 'symbol': symbol,
-                'direction': direction,
-                'conviction': conviction,
+                'direction': final_direction,
+                'conviction': final_conviction,
                 'entry_price': current_price,
                 'position_size': position_size,
                 'stop_loss_pips': stop_loss_pips,
@@ -334,12 +403,69 @@ class EnhancedBacktester:
                 'retail_sentiment': order_flow.retail_sentiment if order_flow else 0.0,
                 'institutional_flow': order_flow.institutional_sentiment if order_flow else 0.0,
                 'rl_action': rl_action,
-                'conditions': conditions
+                'conditions': conditions,
+                'base_confidence': base_confidence
             }
 
         except Exception as e:
             logger.error(f"Error generating signal: {e}")
             return None
+
+    def _combine_all_signals(self,
+                            base_direction: str,
+                            base_confidence: float,
+                            alpha_score: float,
+                            retail_sentiment: float,
+                            institutional_flow: float,
+                            rl_action: int,
+                            llm_decision: Optional[Dict],
+                            adaptive_confidence: float) -> tuple:
+        """
+        Combine base multi-agent decision with 2025 AI enhancements
+
+        Base decision gets 50% weight, enhancements get 50% weight
+        """
+        # Start with base decision (50% weight)
+        base_vote = 1 if base_direction == 'BUY' else -1
+        total_score = base_vote * base_confidence * 0.5
+
+        # 2025 Enhancements (50% weight total)
+
+        # Retail sentiment - FADE (10%)
+        if retail_sentiment > 0.3:
+            total_score += -0.10 * abs(retail_sentiment)
+        elif retail_sentiment < -0.3:
+            total_score += 0.10 * abs(retail_sentiment)
+
+        # Institutional flow - FOLLOW (15%)
+        if institutional_flow > 0.3:
+            total_score += 0.15 * abs(institutional_flow)
+        elif institutional_flow < -0.3:
+            total_score += -0.15 * abs(institutional_flow)
+
+        # RL agent (10%)
+        if rl_action != 0:
+            total_score += rl_action * 0.10
+
+        # LLM decision (15%)
+        if llm_decision:
+            llm_action = llm_decision.get('action', 'HOLD')
+            llm_conviction = llm_decision.get('conviction', 0.0)
+            if llm_action == 'BUY':
+                total_score += 0.15 * llm_conviction
+            elif llm_action == 'SELL':
+                total_score += -0.15 * llm_conviction
+
+        # Apply adaptive learning confidence as multiplier
+        final_conviction = abs(total_score) * adaptive_confidence
+
+        # Minimum conviction threshold
+        if final_conviction < 0.4:
+            return 'HOLD', final_conviction
+
+        direction = 'BUY' if total_score > 0 else 'SELL'
+
+        return direction, final_conviction
 
     def _combine_signals(self,
                         alpha_score: float,
