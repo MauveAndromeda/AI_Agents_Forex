@@ -2,6 +2,93 @@
 
 All notable changes and optimizations to this project will be documented in this file.
 
+## [1.2.0] - 2025-01-05 - 2025 AI Enhancements Release
+
+### Added - 2025 AI Enhancements
+- ✅ **Market Microstructure Analysis** (`src/agents/market_microstructure.py`)
+  - Retail vs institutional flow detection
+  - Strategy: Fade retail sentiment (contrarian), Follow institutional flow (smart money)
+  - Order flow analysis with sentiment scoring
+  - Smart money detection (stop hunts, accumulation, absorption)
+  - Volume imbalance tracking
+  - Breakout fade strategy
+
+- ✅ **Reinforcement Learning Agent** (`src/agents/ai_enhancements_2025.py`)
+  - Q-learning implementation for optimal entry/exit timing
+  - Experience replay buffer (10,000 trade capacity)
+  - Adaptive epsilon-greedy exploration-exploitation
+  - State feature extraction from market data
+  - Continuous learning from trade outcomes
+  - Model save/load functionality
+
+- ✅ **Advanced LLM Reasoning** (`src/agents/ai_enhancements_2025.py`)
+  - Multi-step chain-of-thought analysis
+  - Three-stage reasoning: Situation → Risk → Decision
+  - Context-aware trade validation
+  - Structured JSON decision output
+  - Market structure analysis
+  - Risk assessment for long/short positions
+
+- ✅ **Adaptive Learning System** (`src/agents/ai_enhancements_2025.py`)
+  - Learns from historical trade performance
+  - Performance tracking by market conditions
+  - Win rate and profitability analysis
+  - Condition-based trade filtering
+  - Best/worst condition identification
+  - Minimum sample size requirements
+
+- ✅ **High-Leverage Risk Management** (`src/risk/high_leverage_risk.py`)
+  - Ultra-conservative parameters for 50x leverage (Forex.com)
+  - 0.5% risk per trade (vs 2% standard)
+  - Maximum 15 pip stop loss
+  - 2 concurrent positions max (vs 5 standard)
+  - Liquidation price calculation and monitoring
+  - Margin call detection with 30% buffer
+  - Position size validation for leverage
+
+- ✅ **Enhanced Strategy** (`src/strategy/forex_strategy_enhanced.py`)
+  - Full integration of all 2025 AI components
+  - Weighted signal combination algorithm
+  - Real-time position monitoring
+  - Adaptive learning feedback loop
+  - RL agent state tracking
+  - Performance metrics tracking
+  - Command-line interface for easy deployment
+
+### Improved
+- ✅ **Documentation**
+  - Changed positioning from "institutional-grade" to "research-grade"
+  - Added comprehensive 2025 AI enhancements section
+  - Enhanced disclaimer with critical warnings
+  - Added research notes about framework nature
+  - Updated architecture diagram with new files
+  - Added enhanced strategy usage examples
+  - Command-line usage documentation
+
+- ✅ **Risk Management**
+  - Separate risk managers for standard vs high-leverage
+  - More conservative parameters for 50x leverage
+  - Better margin health monitoring
+  - Liquidation price tracking
+
+### Documentation
+- 📚 Updated README.md to research-grade positioning
+- 📚 Added 2025 AI Enhancements feature section
+- 📚 Enhanced disclaimer and research notes
+- 📚 Command-line usage examples
+- 📚 Updated architecture diagram
+
+### Strategy
+The enhanced strategy implements:
+1. Market microstructure analysis for flow detection
+2. Contrarian retail fade + institutional follow
+3. RL agent for timing optimization
+4. Advanced LLM for multi-step reasoning
+5. Adaptive learning from outcomes
+6. Ultra-conservative risk for high leverage
+
+---
+
 ## [1.1.0] - 2025-01-05 - Optimization Release
 
 ### Added

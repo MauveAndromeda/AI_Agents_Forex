@@ -2,7 +2,9 @@
 
 **AI-Enhanced Multi-Timeframe Forex Trading System**
 
-An institutional-grade quantitative forex trading platform combining 100+ alpha factors, multi-agent AI decision-making, and sophisticated risk management. Built specifically for MetaTrader 5 with support for dozens of forex pairs and multiple timeframes.
+A research-grade quantitative forex trading framework combining 100+ alpha factors, multi-agent AI decision-making with 2025 enhancements (reinforcement learning, advanced LLM reasoning, adaptive learning), and sophisticated risk management. Built specifically for MetaTrader 5 with support for dozens of forex pairs and multiple timeframes.
+
+**Status**: Research/Educational framework with production-grade code quality
 
 ## 🚀 Features
 
@@ -29,6 +31,38 @@ An institutional-grade quantitative forex trading platform combining 100+ alpha 
   - OpenAI (GPT-4o)
   - Anthropic (Claude)
   - Google (Gemini)
+
+### 2025 AI Enhancements (NEW)
+- **Market Microstructure Analysis**:
+  - Retail vs Institutional flow detection
+  - Strategy: **Fade retail sentiment** (contrarian), **Follow institutional flow** (smart money)
+  - Order flow analysis with sentiment detection
+  - Smart money detection (stop hunts, accumulation patterns)
+
+- **Reinforcement Learning Agent**:
+  - Q-learning for optimal entry/exit timing
+  - Experience replay buffer (10,000 trades)
+  - Adaptive exploration-exploitation (epsilon-greedy)
+  - Continuous learning from trade outcomes
+
+- **Advanced LLM Reasoning**:
+  - Multi-step chain-of-thought analysis
+  - Situation → Risk → Decision reasoning flow
+  - Context-aware trade validation
+  - Structured JSON decision output
+
+- **Adaptive Learning System**:
+  - Learns from historical trade performance
+  - Identifies favorable market conditions
+  - Avoids conditions that historically led to losses
+  - Win rate and profitability tracking by condition
+
+- **High-Leverage Risk Management** (50x specific):
+  - Ultra-conservative: 0.5% risk per trade (vs 2% standard)
+  - Maximum 15 pip stop loss
+  - 2 concurrent positions max (vs 5 standard)
+  - Liquidation price monitoring
+  - 30% margin buffer requirement
 
 ### Advanced Risk Management
 - **Position Sizing**: Dynamic lot sizing based on account risk and volatility
@@ -160,21 +194,34 @@ Final Balance:     $11,850.00
 AI_Agents_Forex/
 ├── src/
 │   ├── data/
-│   │   └── mt5_connector.py         # MT5 data interface
+│   │   └── mt5_connector.py                      # MT5 data interface
 │   ├── models/
-│   │   └── forex_alpha_factors.py   # 100+ alpha factors
+│   │   ├── forex_alpha_factors.py                # 100+ alpha factors
+│   │   └── forex_alpha_factors_optimized.py      # Cached version (60% faster)
 │   ├── agents/
-│   │   └── trading_agents.py        # Multi-agent system
+│   │   ├── trading_agents.py                     # Multi-agent system
+│   │   ├── market_microstructure.py              # Retail vs institutional flow
+│   │   └── ai_enhancements_2025.py               # RL, LLM, adaptive learning
 │   ├── risk/
-│   │   └── forex_risk_manager.py    # Risk management
+│   │   ├── forex_risk_manager.py                 # Standard risk management
+│   │   └── high_leverage_risk.py                 # 50x leverage specific
 │   ├── ai/
-│   │   └── unified_llm_client.py    # Multi-LLM support
-│   └── backtest/
-│       └── forex_backtester.py      # Backtesting engine
-├── config.py                         # Configuration manager
-├── quick_backtest.py                 # Quick backtest script
-├── requirements.txt                  # Dependencies
-└── .env.example                      # Environment template
+│   │   └── unified_llm_client.py                 # Multi-LLM support
+│   ├── backtest/
+│   │   └── forex_backtester.py                   # Backtesting engine
+│   ├── execution/
+│   │   └── mt5_executor.py                       # Order execution
+│   └── strategy/
+│       ├── forex_strategy.py                     # Standard strategy
+│       └── forex_strategy_enhanced.py            # Enhanced with 2025 AI
+├── tools/
+│   ├── system_validator.py                       # System health check
+│   └── visualize_results.py                      # Performance visualization
+├── config.py                                      # Configuration manager
+├── quick_backtest.py                              # Quick backtest script
+├── requirements.txt                               # Dependencies
+├── CHANGELOG.md                                   # Version history
+└── .env.example                                   # Environment template
 ```
 
 ## 🔧 Configuration
@@ -380,6 +427,53 @@ if decision:
     print(f"\nReasoning:\n{decision.reasoning}")
 ```
 
+### Enhanced Strategy with 2025 AI (NEW)
+```python
+from src.strategy.forex_strategy_enhanced import EnhancedForexStrategy
+
+# Initialize enhanced strategy with all AI features
+strategy = EnhancedForexStrategy(
+    symbols=['EURUSD', 'GBPUSD'],
+    timeframes=['H1', 'M15'],
+    account_balance=10000.0,
+    leverage=50,  # Forex.com MT5
+    use_llm=True,
+    enable_rl=True,
+    enable_adaptive_learning=True,
+    dry_run=True  # Paper trading mode
+)
+
+# Run strategy (will generate signals, execute, and learn)
+# Duration: None = indefinite, or specify hours
+strategy.run(duration_hours=24)
+
+# Strategy automatically:
+# 1. Detects retail vs institutional flow
+# 2. Fades retail sentiment (contrarian)
+# 3. Follows institutional flow (smart money)
+# 4. Uses RL agent for optimal timing
+# 5. Validates with advanced LLM reasoning
+# 6. Learns from outcomes adaptively
+# 7. Manages 50x leverage risk ultra-conservatively
+```
+
+Command line usage:
+```bash
+# Run enhanced strategy with 50x leverage on EURUSD
+python -m src.strategy.forex_strategy_enhanced \
+    --symbols EURUSD GBPUSD \
+    --balance 10000 \
+    --leverage 50 \
+    --duration 24 \
+    --dry-run
+
+# Live trading (remove --dry-run)
+python -m src.strategy.forex_strategy_enhanced \
+    --symbols EURUSD \
+    --balance 5000 \
+    --leverage 50
+```
+
 ## 📚 Comparison with Stock_Deepseeker
 
 ### Similarities
@@ -387,7 +481,8 @@ if decision:
 - 100+ alpha factors
 - Regime detection
 - AI-enhanced decision making
-- Institutional-grade risk management
+- Sophisticated risk management
+- Production-grade code quality
 
 ### Forex-Specific Adaptations
 - ✅ **MT5 Integration** (vs Alpaca for stocks)
@@ -485,16 +580,59 @@ See [CHANGELOG.md](CHANGELOG.md) for full details.
 
 **This software is for educational and research purposes only.**
 
-- Trading forex involves substantial risk of loss
+This is a **research-grade framework**, not a production trading system. While the code quality is production-grade, the system has not been validated in live markets with real capital over extended periods.
+
+**Critical Warnings:**
+- Trading forex involves substantial risk of loss and is not suitable for all investors
+- High leverage (50x+) can lead to rapid and complete loss of capital
 - Past performance does not guarantee future results
-- No system can guarantee profits
-- Use at your own risk
-- Always test thoroughly before live trading
-- Consider your risk tolerance and financial situation
-- Consult with a financial advisor before trading
+- No system, no matter how sophisticated, can guarantee profits
+- AI/ML models may behave unpredictably in extreme market conditions
+- Always test extensively in paper trading before risking real capital
+- Consider your risk tolerance, financial situation, and trading experience
+- Consult with a qualified financial advisor before trading
+
+**Recommended Path:**
+1. Backtest extensively (2+ years of data, multiple market regimes)
+2. Paper trade for 1-3 months minimum
+3. Start with minimal capital (5-10% of intended amount)
+4. Use very low leverage initially (5-10x, not 50x)
+5. Monitor closely and adjust based on real performance
+6. Never risk more than you can afford to lose completely
+
+**Development Status:**
+- Code Quality: Production-grade ✓
+- Testing Coverage: Limited (research phase)
+- Live Market Validation: None (research phase)
+- Long-term Performance: Unproven
+
+Use this framework as a starting point for your own research and development. Customize and validate thoroughly before considering any live deployment.
 
 ---
 
-**Built with ❤️ for the forex trading community**
+## 🔬 Research Notes
 
-*Inspired by Stock_Deepseeker - Adapted for the unique characteristics of 24/5 forex markets*
+**What This Project Provides:**
+- High-quality, well-structured codebase for forex trading research
+- Comprehensive alpha factor library adapted for forex markets
+- Multi-agent AI architecture with 2025 enhancements
+- Advanced risk management framework (including high-leverage)
+- Market microstructure analysis (retail vs institutional flow)
+- Complete backtesting and analysis tools
+
+**What You Need to Add:**
+- Extensive backtesting on your specific pairs and timeframes
+- Parameter optimization for your risk tolerance
+- Live testing in paper trading environment
+- Monitoring and alerting infrastructure
+- Database for persistent storage
+- Comprehensive test suite
+- Your own trading insights and domain knowledge
+
+This is a research framework, not a turnkey solution. Success requires significant additional work, testing, and customization.
+
+---
+
+**Built for the forex trading research community**
+
+*Inspired by Stock_Deepseeker - Adapted for 24/5 forex markets with 2025 AI enhancements*
