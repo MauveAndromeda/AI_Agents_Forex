@@ -134,6 +134,15 @@ class ForexRiskManager:
         Returns:
             Lot size
         """
+        # Input validation
+        if entry_price <= 0 or stop_loss_price <= 0:
+            logger.warning(f"Invalid prices for {symbol}: entry={entry_price}, sl={stop_loss_price}")
+            return 0.0
+
+        if abs(entry_price - stop_loss_price) < 0.00001:
+            logger.warning(f"Stop loss too close to entry for {symbol}")
+            return 0.0
+
         # Risk amount for this trade
         risk_amount = self.account_balance * self.risk_level.value
 
@@ -141,14 +150,18 @@ class ForexRiskManager:
         risk_amount *= self._get_regime_risk_multiplier()
 
         # Adjust risk based on current drawdown
-        if self.get_current_drawdown() > 0.05:  # If in 5%+ drawdown
+        current_dd = self.get_current_drawdown()
+        if current_dd > 0.05:  # If in 5%+ drawdown
             risk_amount *= 0.5  # Reduce risk by half
+            logger.info(f"Drawdown {current_dd:.2%}, reducing position size")
 
-        # Calculate stop loss in pips
-        stop_loss_pips = abs(entry_price - stop_loss_price) / 0.0001  # For most pairs
+        # Calculate stop loss in pips (handle JPY pairs differently)
+        pip_size = 0.01 if 'JPY' in symbol.upper() else 0.0001
+        stop_loss_pips = abs(entry_price - stop_loss_price) / pip_size
 
-        # Avoid division by zero
+        # Avoid division by zero or too tight stops
         if stop_loss_pips < 1:
+            logger.warning(f"Stop loss too tight for {symbol}: {stop_loss_pips:.1f} pips")
             return min_lot
 
         # Calculate lot size

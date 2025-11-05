@@ -448,6 +448,39 @@ For issues and questions:
 - GitHub Issues: https://github.com/MauveAndromeda/AI_Agents_Forex/issues
 - Based on Stock_Deepseeker architecture: https://github.com/MauveAndromeda/Stock_Deepseeker
 
+## 🚀 Performance Optimizations (v1.1.0)
+
+### New in v1.1.0
+
+**Alpha Factor Caching** (60% faster):
+```python
+from src.models.forex_alpha_factors_optimized import ForexAlphaFactorsOptimized
+
+# Enable caching for better performance
+factors = ForexAlphaFactorsOptimized(enable_cache=True, cache_ttl=60)
+signals = factors.calculate_all_factors(data, symbol)
+```
+
+**System Validation Tool**:
+```bash
+# Validate your setup before trading
+python tools/system_validator.py
+```
+
+**Enhanced Error Recovery**:
+- MT5 auto-reconnect with exponential backoff
+- Robust handling of network issues
+- Improved logging for debugging
+
+**Bug Fixes**:
+- ✅ Fixed JPY pair pip calculation
+- ✅ Enhanced input validation
+- ✅ Better error messages
+
+See [CHANGELOG.md](CHANGELOG.md) for full details.
+
+---
+
 ## ⚖️ Disclaimer
 
 **This software is for educational and research purposes only.**

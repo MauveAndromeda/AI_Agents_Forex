@@ -48,7 +48,8 @@ class MT5Connector:
     Supports multiple timeframes and forex pairs
     """
 
-    def __init__(self, account: int = None, password: str = None, server: str = None):
+    def __init__(self, account: int = None, password: str = None, server: str = None,
+                 max_retries: int = 3, retry_delay: float = 2.0):
         """
         Initialize MT5 connection
 
@@ -56,33 +57,62 @@ class MT5Connector:
             account: MT5 account number
             password: MT5 password
             server: MT5 server name
+            max_retries: Maximum connection retry attempts
+            retry_delay: Delay between retries in seconds
         """
         self.account = account
         self.password = password
         self.server = server
         self.connected = False
         self.symbols_info = {}
+        self.max_retries = max_retries
+        self.retry_delay = retry_delay
 
     def connect(self) -> bool:
-        """Establish connection to MT5"""
-        try:
-            if not mt5.initialize():
-                logger.error(f"MT5 initialization failed: {mt5.last_error()}")
-                return False
+        """Establish connection to MT5 with retry logic"""
+        import time
 
-            if self.account and self.password and self.server:
-                authorized = mt5.login(self.account, password=self.password, server=self.server)
-                if not authorized:
-                    logger.error(f"MT5 login failed: {mt5.last_error()}")
+        for attempt in range(self.max_retries):
+            try:
+                if not mt5.initialize():
+                    error = mt5.last_error()
+                    logger.warning(f"MT5 initialization attempt {attempt + 1} failed: {error}")
+                    if attempt < self.max_retries - 1:
+                        time.sleep(self.retry_delay)
+                        continue
+                    else:
+                        logger.error(f"MT5 initialization failed after {self.max_retries} attempts")
+                        return False
+
+                if self.account and self.password and self.server:
+                    authorized = mt5.login(self.account, password=self.password, server=self.server)
+                    if not authorized:
+                        error = mt5.last_error()
+                        logger.warning(f"MT5 login attempt {attempt + 1} failed: {error}")
+                        if attempt < self.max_retries - 1:
+                            time.sleep(self.retry_delay)
+                            mt5.shutdown()
+                            continue
+                        else:
+                            logger.error(f"MT5 login failed after {self.max_retries} attempts")
+                            return False
+
+                self.connected = True
+                terminal_info = mt5.terminal_info()
+                if terminal_info:
+                    logger.info(f"MT5 connection established - {terminal_info.company} v{terminal_info.version}")
+                else:
+                    logger.info("MT5 connection established")
+                return True
+
+            except Exception as e:
+                logger.error(f"Connection attempt {attempt + 1} error: {e}")
+                if attempt < self.max_retries - 1:
+                    time.sleep(self.retry_delay)
+                else:
                     return False
 
-            self.connected = True
-            logger.info("MT5 connection established")
-            return True
-
-        except Exception as e:
-            logger.error(f"Connection error: {e}")
-            return False
+        return False
 
     def disconnect(self):
         """Close MT5 connection"""
