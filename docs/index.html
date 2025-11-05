@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Agents Forex - Research-Grade Multi-Agent Forex Trading System with 2025 AI Enhancements">
+    <meta name="keywords" content="forex trading, AI agents, machine learning, reinforcement learning, algorithmic trading">
+    <meta name="author" content="MauveAndromeda">
+
+    <title>AI Agents Forex - Advanced Trading System</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-robot"></i>
+                <span>AI Agents Forex</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#stats">Stats</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="https://github.com/MauveAndromeda/AI_Agents_Forex" class="btn btn-primary" target="_blank">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="grid-overlay"></div>
+            <canvas id="particlesCanvas"></canvas>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles"></i>
+                    <span>Research-Grade AI Trading System</span>
+                </div>
+                <h1 class="hero-title">
+                    Next-Generation
+                    <span class="gradient-text">Forex Trading</span>
+                    with 8 AI Agents
+                </h1>
+                <p class="hero-subtitle">
+                    A production-grade multi-agent system combining 100+ alpha factors,
+                    reinforcement learning, and advanced LLM reasoning for forex markets
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">8,200+</div>
+                        <div class="stat-label">Lines of Code</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">AI Agents</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">Alpha Factors</div>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="#demo" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i> Try Demo
+                    </a>
+                    <a href="https://github.com/MauveAndromeda/AI_Agents_Forex" class="btn btn-secondary btn-lg" target="_blank">
+                        <i class="fas fa-code"></i> View Source
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Powerful Features</h2>
+                <p class="section-subtitle">Everything you need for advanced forex trading research</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Multi-Agent System</h3>
+                    <p>4 specialized agents working together: Technical Analyst, Risk Manager, Sentiment Analyst, and Execution Agent</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Collaborative decision making</li>
+                        <li><i class="fas fa-check"></i> Role-specific expertise</li>
+                        <li><i class="fas fa-check"></i> LLM-enhanced reasoning</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>2025 AI Enhancements</h3>
+                    <p>Cutting-edge AI features including RL, advanced LLM reasoning, and adaptive learning systems</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Q-learning with experience replay</li>
+                        <li><i class="fas fa-check"></i> Chain-of-thought reasoning</li>
+                        <li><i class="fas fa-check"></i> Learns from trade outcomes</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>100+ Alpha Factors</h3>
+                    <p>Comprehensive factor library covering momentum, reversal, volatility, trends, and patterns</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Multi-timeframe analysis</li>
+                        <li><i class="fas fa-check"></i> Cached for 60% faster performance</li>
+                        <li><i class="fas fa-check"></i> Forex-optimized calculations</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>High-Leverage Risk Management</h3>
+                    <p>Ultra-conservative risk controls specifically designed for 50x leverage trading</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> 0.5% risk per trade</li>
+                        <li><i class="fas fa-check"></i> 15 pip max stop loss</li>
+                        <li><i class="fas fa-check"></i> Liquidation price monitoring</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Market Microstructure</h3>
+                    <p>Detects retail vs institutional order flow to fade retail and follow smart money</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Retail sentiment detection</li>
+                        <li><i class="fas fa-check"></i> Institutional flow tracking</li>
+                        <li><i class="fas fa-check"></i> Stop hunt identification</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Adaptive Learning</h3>
+                    <p>Learns from historical performance to identify favorable conditions and avoid losses</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Performance tracking by condition</li>
+                        <li><i class="fas fa-check"></i> Win rate analysis</li>
+                        <li><i class="fas fa-check"></i> Condition-based filtering</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture" id="architecture">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">System Architecture</h2>
+                <p class="section-subtitle">8 AI components working in harmony</p>
+            </div>
+            <div class="architecture-diagram">
+                <div class="arch-layer">
+                    <h3>Original Multi-Agent System</h3>
+                    <div class="arch-components">
+                        <div class="arch-component">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Technical Analyst</span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-shield"></i>
+                            <span>Risk Manager</span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-comments"></i>
+                            <span>Sentiment Analyst</span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Execution Agent</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                <div class="arch-layer">
+                    <h3>2025 AI Enhancements</h3>
+                    <div class="arch-components">
+                        <div class="arch-component">
+                            <i class="fas fa-microscope"></i>
+                            <span>Microstructure</span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-robot"></i>
+                            <span>RL Agent</span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-brain"></i>
+                            <span>Advanced LLM</span>
+                        </div>
+                        <div class="arch-component">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Adaptive Learning</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                <div class="arch-output">
+                    <i class="fas fa-flag-checkered"></i>
+                    <span>Final Trading Decision</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats" id="stats">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Statistics</h2>
+                <p class="section-subtitle">Numbers that matter</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">8,200</div>
+                        <div class="stat-label">Lines of Python Code</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-folder"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Core Modules</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">AI Components</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">100+</div>
+                        <div class="stat-label">Alpha Factors</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">9</div>
+                        <div class="stat-label">Timeframes Supported</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Currency Pairs</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-breakdown">
+                <h3>Code Distribution</h3>
+                <div class="code-bars">
+                    <div class="code-bar">
+                        <div class="code-bar-label">
+                            <span>agents/</span>
+                            <span>1,572 lines</span>
+                        </div>
+                        <div class="code-bar-fill" style="width: 25%" data-percentage="25"></div>
+                    </div>
+                    <div class="code-bar">
+                        <div class="code-bar-label">
+                            <span>strategy/</span>
+                            <span>1,103 lines</span>
+                        </div>
+                        <div class="code-bar-fill" style="width: 18%" data-percentage="18"></div>
+                    </div>
+                    <div class="code-bar">
+                        <div class="code-bar-label">
+                            <span>risk/</span>
+                            <span>906 lines</span>
+                        </div>
+                        <div class="code-bar-fill" style="width: 14%" data-percentage="14"></div>
+                    </div>
+                    <div class="code-bar">
+                        <div class="code-bar-label">
+                            <span>data/</span>
+                            <span>858 lines</span>
+                        </div>
+                        <div class="code-bar-fill" style="width: 14%" data-percentage="14"></div>
+                    </div>
+                    <div class="code-bar">
+                        <div class="code-bar-label">
+                            <span>models/</span>
+                            <span>725 lines</span>
+                        </div>
+                        <div class="code-bar-fill" style="width: 12%" data-percentage="12"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo" id="demo">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Quick Start Demo</h2>
+                <p class="section-subtitle">Get started in seconds</p>
+            </div>
+            <div class="demo-content">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span class="terminal-button red"></span>
+                            <span class="terminal-button yellow"></span>
+                            <span class="terminal-button green"></span>
+                        </div>
+                        <div class="terminal-title">bash</div>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-command">git clone https://github.com/MauveAndromeda/AI_Agents_Forex.git</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-command">cd AI_Agents_Forex</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-command">pip install -r requirements.txt</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-command">python run_backtest.py</span>
+                        </div>
+                        <div class="terminal-output">
+                            <span class="output-success">✓ All systems initialized</span><br>
+                            <span class="output-info">✓ Multi-Agent System initialized (4 agents)</span><br>
+                            <span class="output-info">✓ 2025 AI Enhancements loaded</span><br>
+                            <span class="output-success">✅ Backtest completed successfully!</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-info">
+                    <h3>One Command to Rule Them All</h3>
+                    <p>Run a complete backtest with all 8 AI components in a single command. Uses GPT-5-nano by default for fast, cost-effective testing.</p>
+                    <div class="demo-features">
+                        <div class="demo-feature">
+                            <i class="fas fa-zap"></i>
+                            <span>Blazing Fast</span>
+                        </div>
+                        <div class="demo-feature">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Cost Effective</span>
+                        </div>
+                        <div class="demo-feature">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Comprehensive Results</span>
+                        </div>
+                    </div>
+                    <a href="https://github.com/MauveAndromeda/AI_Agents_Forex#quick-start" class="btn btn-primary" target="_blank">
+                        <i class="fas fa-book"></i> Read Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-robot"></i> AI Agents Forex</h3>
+                    <p>Research-grade multi-agent forex trading system with 2025 AI enhancements.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/MauveAndromeda" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="mailto:your-email@example.com">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/MauveAndromeda/AI_Agents_Forex">GitHub Repository</a></li>
+                        <li><a href="https://github.com/MauveAndromeda/AI_Agents_Forex#readme">Documentation</a></li>
+                        <li><a href="https://github.com/MauveAndromeda/AI_Agents_Forex/blob/main/CHANGELOG.md">Changelog</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/MauveAndromeda/AI_Agents_Forex/blob/main/BACKTEST_GUIDE.md">Backtest Guide</a></li>
+                        <li><a href="https://github.com/MauveAndromeda/AI_Agents_Forex/blob/main/PROJECT_STATS.md">Project Stats</a></li>
+                        <li><a href="https://github.com/MauveAndromeda/AI_Agents_Forex/issues">Report Issues</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MauveAndromeda. Licensed under MIT License.</p>
+                <p>⚠️ Research and educational purposes only. Not financial advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
