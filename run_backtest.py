@@ -62,7 +62,7 @@ class EnhancedBacktester:
                  symbols: List[str],
                  initial_balance: float = 10000.0,
                  leverage: int = 50,
-                 llm_provider: str = 'gpt-4o-mini',
+                 llm_provider: str = 'gpt-5-nano',
                  duration_days: int = 90,
                  use_simulated_data: bool = True):
         """
@@ -163,6 +163,7 @@ class EnhancedBacktester:
     def _create_llm_client(self, provider: str) -> UnifiedLLMClient:
         """Create LLM client based on provider string"""
         provider_map = {
+            'gpt-5-nano': LLMProvider.OPENAI,
             'gpt-4o-mini': LLMProvider.OPENAI,
             'gpt-4o': LLMProvider.OPENAI,
             'claude-sonnet-4.5': LLMProvider.ANTHROPIC,
@@ -746,8 +747,8 @@ def main():
     parser.add_argument(
         '--llm',
         type=str,
-        default='gpt-4o-mini',
-        choices=['gpt-4o-mini', 'gpt-4o', 'claude-sonnet-4.5', 'claude-3.5-sonnet', 'deepseek', 'gemini'],
+        default='gpt-5-nano',
+        choices=['gpt-5-nano', 'gpt-4o-mini', 'gpt-4o', 'claude-sonnet-4.5', 'claude-3.5-sonnet', 'deepseek', 'gemini'],
         help='LLM provider to use'
     )
 

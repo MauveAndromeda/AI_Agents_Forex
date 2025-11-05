@@ -97,7 +97,11 @@ AI_Agents_Forex/
 
 ### One-Click Backtest
 ```bash
-python run_backtest.py --llm gpt-4o-mini
+# Use default GPT-5-nano (fastest, cheapest)
+python run_backtest.py
+
+# Or specify a model
+python run_backtest.py --llm gpt-5-nano
 ```
 
 **Tests ALL 8 AI components**:

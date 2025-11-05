@@ -8,8 +8,11 @@
 # Navigate to project directory
 cd /workspace/AI_Agents_Forex  # or wherever you cloned the repo
 
-# Run backtest with GPT-4o-mini (fastest, cheapest)
-python run_backtest.py --llm gpt-4o-mini
+# Run backtest with GPT-5-nano (default, fastest, cheapest)
+python run_backtest.py
+
+# Or explicitly specify
+python run_backtest.py --llm gpt-5-nano
 
 # Or with Claude Sonnet 4.5 (highest quality)
 python run_backtest.py --llm claude-sonnet-4.5
@@ -74,16 +77,17 @@ python run_backtest.py \
 
 ## Available LLM Models
 
-| Model | Provider | Speed | Cost | Quality |
-|-------|----------|-------|------|---------|
-| `gpt-4o-mini` | OpenAI | Fast | Low | Good |
-| `gpt-4o` | OpenAI | Medium | Medium | Excellent |
-| `claude-sonnet-4.5` | Anthropic | Medium | Medium | Excellent |
-| `claude-3.5-sonnet` | Anthropic | Medium | Medium | Very Good |
-| `deepseek` | DeepSeek | Fast | Very Low | Good |
-| `gemini` | Google | Fast | Low | Good |
+| Model | Provider | Speed | Cost | Quality | Notes |
+|-------|----------|-------|------|---------|-------|
+| `gpt-5-nano` | OpenAI | Very Fast | Very Low | Good | ⭐ **Default** |
+| `gpt-4o-mini` | OpenAI | Fast | Low | Good | |
+| `gpt-4o` | OpenAI | Medium | Medium | Excellent | |
+| `claude-sonnet-4.5` | Anthropic | Medium | Medium | Excellent | |
+| `claude-3.5-sonnet` | Anthropic | Medium | Medium | Very Good | |
+| `deepseek` | DeepSeek | Fast | Very Low | Good | |
+| `gemini` | Google | Fast | Low | Good | |
 
-**Recommendation**: Start with `gpt-4o-mini` for quick tests, use `claude-sonnet-4.5` or `gpt-4o` for final validation.
+**Recommendation**: Default `gpt-5-nano` is perfect for quick tests. Use `claude-sonnet-4.5` or `gpt-4o` for final validation.
 
 ## What Gets Tested
 
@@ -186,14 +190,14 @@ ENHANCED FOREX BACKTEST - 2025 AI ENHANCEMENTS
 Symbols: EURUSD, GBPUSD
 Initial Balance: $10,000.00
 Leverage: 50x
-LLM Provider: gpt-4o-mini
+LLM Provider: gpt-5-nano
 Duration: 90 days
 Data Source: Simulated
 ================================================================================
 
 ✓ Simulated data generator initialized
 ✓ Alpha factors initialized (100+ factors, cached)
-✓ LLM client initialized (gpt-4o-mini)
+✓ LLM client initialized (gpt-5-nano)
 ✓ Multi-Agent System initialized (4 agents: Technical, Risk, Sentiment, Execution)
 ✓ Market microstructure analyzer initialized (retail vs institutional)
 ✓ RL agent initialized (Q-learning)
@@ -314,7 +318,7 @@ pip install TA-Lib
 **Solution**:
 - Use fewer symbols: `--symbols EURUSD`
 - Shorter duration: `--duration 30`
-- Faster LLM: `--llm gpt-4o-mini`
+- Already using fastest: `--llm gpt-5-nano` (default)
 
 ## Performance Expectations
 
@@ -346,7 +350,8 @@ If you encounter issues:
 
 **Ready to backtest? Just run:**
 ```bash
-python run_backtest.py --llm gpt-4o-mini
+python run_backtest.py
 ```
+*(Uses gpt-5-nano by default - no need to specify!)*
 
 🚀 Happy backtesting!

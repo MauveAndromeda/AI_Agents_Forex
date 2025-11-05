@@ -159,8 +159,11 @@ DEEPSEEK_API_KEY=sk-xxxxx
 **Perfect for vast.ai PyTorch Jupyter environments!**
 
 ```bash
-# Basic backtest with GPT-4o-mini (fast & cheap)
-python run_backtest.py --llm gpt-4o-mini
+# Basic backtest with GPT-5-nano (default, fast & cheap)
+python run_backtest.py
+
+# Or explicitly specify
+python run_backtest.py --llm gpt-5-nano
 
 # With Claude Sonnet 4.5 (highest quality)
 python run_backtest.py --llm claude-sonnet-4.5
@@ -179,7 +182,7 @@ python run_backtest.py \
 - ✅ Tests **ALL 8 AI components**: Original 4-agent system + 2025 enhancements
   - **Original**: TechnicalAnalyst, RiskManager, Sentiment, Execution agents
   - **2025**: Microstructure, RL, Advanced LLM, Adaptive Learning
-- ✅ Choose your LLM: `gpt-4o-mini`, `gpt-4o`, `claude-sonnet-4.5`, `deepseek`, `gemini`
+- ✅ Choose your LLM: `gpt-5-nano` (default), `gpt-4o-mini`, `gpt-4o`, `claude-sonnet-4.5`, `deepseek`, `gemini`
 - ✅ Comprehensive results with AI component analysis
 - ✅ Saves detailed JSON reports
 
