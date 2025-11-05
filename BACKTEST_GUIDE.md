@@ -9,13 +9,13 @@
 cd /workspace/AI_Agents_Forex  # or wherever you cloned the repo
 
 # Run backtest with GPT-4o-mini (fastest, cheapest)
-python backtest_enhanced_one_click.py --llm gpt-4o-mini
+python run_backtest.py --llm gpt-4o-mini
 
 # Or with Claude Sonnet 4.5 (highest quality)
-python backtest_enhanced_one_click.py --llm claude-sonnet-4.5
+python run_backtest.py --llm claude-sonnet-4.5
 
 # Or with GPT-4o (balanced)
-python backtest_enhanced_one_click.py --llm gpt-4o
+python run_backtest.py --llm gpt-4o
 ```
 
 ### 2. Set API Keys (Required for LLM features)
@@ -39,32 +39,32 @@ echo "ANTHROPIC_API_KEY=sk-ant-your-key-here" >> .env
 
 ```bash
 # Default: GPT-4o-mini, EURUSD+GBPUSD, 90 days, $10k balance
-python backtest_enhanced_one_click.py
+python run_backtest.py
 ```
 
 ### Custom Options
 
 ```bash
 # Choose different LLM
-python backtest_enhanced_one_click.py --llm claude-sonnet-4.5
+python run_backtest.py --llm claude-sonnet-4.5
 
 # Test more symbols
-python backtest_enhanced_one_click.py --symbols EURUSD GBPUSD USDJPY AUDUSD
+python run_backtest.py --symbols EURUSD GBPUSD USDJPY AUDUSD
 
 # Longer duration
-python backtest_enhanced_one_click.py --duration 180
+python run_backtest.py --duration 180
 
 # Different starting balance
-python backtest_enhanced_one_click.py --balance 50000
+python run_backtest.py --balance 50000
 
 # Different leverage
-python backtest_enhanced_one_click.py --leverage 100
+python run_backtest.py --leverage 100
 ```
 
 ### All Options Combined
 
 ```bash
-python backtest_enhanced_one_click.py \
+python run_backtest.py \
     --llm gpt-4o \
     --symbols EURUSD GBPUSD USDJPY \
     --balance 25000 \
@@ -270,7 +270,7 @@ nvidia-smi
 
 ### 3. Run in Background (for long tests)
 ```bash
-nohup python backtest_enhanced_one_click.py --duration 180 > backtest.log 2>&1 &
+nohup python run_backtest.py --duration 180 > backtest.log 2>&1 &
 ```
 
 ### 4. Monitor Progress
@@ -291,7 +291,7 @@ After backtest completes, download the results file:
 **Solution**: Make sure you're in the project root directory
 ```bash
 cd /workspace/AI_Agents_Forex
-python backtest_enhanced_one_click.py
+python run_backtest.py
 ```
 
 ### Issue: "API key not found"
@@ -346,7 +346,7 @@ If you encounter issues:
 
 **Ready to backtest? Just run:**
 ```bash
-python backtest_enhanced_one_click.py --llm gpt-4o-mini
+python run_backtest.py --llm gpt-4o-mini
 ```
 
 🚀 Happy backtesting!

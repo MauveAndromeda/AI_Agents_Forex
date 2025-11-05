@@ -154,19 +154,19 @@ DEEPSEEK_API_KEY=sk-xxxxx
 
 ## 🎯 Quick Start
 
-### One-Click Enhanced Backtest (NEW - For vast.ai / No MT5 Required)
+### One-Click Backtest (NEW - For vast.ai / No MT5 Required)
 
 **Perfect for vast.ai PyTorch Jupyter environments!**
 
 ```bash
 # Basic backtest with GPT-4o-mini (fast & cheap)
-python backtest_enhanced_one_click.py --llm gpt-4o-mini
+python run_backtest.py --llm gpt-4o-mini
 
 # With Claude Sonnet 4.5 (highest quality)
-python backtest_enhanced_one_click.py --llm claude-sonnet-4.5
+python run_backtest.py --llm claude-sonnet-4.5
 
 # Custom options
-python backtest_enhanced_one_click.py \
+python run_backtest.py \
     --llm gpt-4o \
     --symbols EURUSD GBPUSD USDJPY \
     --balance 25000 \
@@ -184,20 +184,6 @@ python backtest_enhanced_one_click.py \
 - ✅ Saves detailed JSON reports
 
 **See [BACKTEST_GUIDE.md](BACKTEST_GUIDE.md) for complete instructions.**
-
-### Run Quick Backtest (Requires MT5)
-```bash
-python quick_backtest.py
-```
-
-This will:
-1. Connect to MT5
-2. Fetch top 10 forex pairs
-3. Run multi-timeframe analysis
-4. Generate trading signals with AI enhancement
-5. Simulate trades with realistic execution
-6. Output performance metrics
-7. Save detailed results to `backtest_results/`
 
 ### Expected Output
 ```
