@@ -53,7 +53,8 @@ def install_package(package_name, import_name=None):
         __import__(import_name)
         print(f"✓ {package_name} 已安装")
         return True
-    except ImportError:
+    except Exception as e:
+        # 可能是 ImportError 或其他异常
         print(f"⚙ 正在安装 {package_name}...")
         try:
             subprocess.check_call(
@@ -63,8 +64,8 @@ def install_package(package_name, import_name=None):
             )
             print(f"✓ {package_name} 安装成功")
             return True
-        except subprocess.CalledProcessError:
-            print(f"✗ {package_name} 安装失败 (将尝试继续运行)")
+        except Exception:
+            print(f"⚠ {package_name} 安装/检查失败 (将继续运行)")
             return False
 
 # 核心依赖
