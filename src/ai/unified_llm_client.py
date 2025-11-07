@@ -33,9 +33,9 @@ class BaseLLMClient(ABC):
 class OpenAIClient(BaseLLMClient):
     """OpenAI API client"""
 
-    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-4o"):
+    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-5-nano"):
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
-        self.model = model
+        self.model = model  # 默认使用 gpt-5-nano (GPT-5 系列最快最经济的模型)
 
         if not self.api_key:
             raise ValueError("OpenAI API key not provided")

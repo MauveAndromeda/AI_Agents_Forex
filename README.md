@@ -27,10 +27,11 @@ A research-grade quantitative forex trading framework combining 100+ alpha facto
   - Execution Agent: Final trade approval with multiple safety checks
 
 - **LLM Support**: Multiple AI providers with automatic fallback
-  - DeepSeek (recommended for cost-effectiveness)
-  - OpenAI (GPT-4o)
-  - Anthropic (Claude)
-  - Google (Gemini)
+  - **OpenAI GPT-5-nano** (默认 ⭐ - 最快最经济)
+  - DeepSeek (超低成本备选)
+  - OpenAI GPT-4o/4o-mini (高质量分析)
+  - Anthropic Claude (强推理能力)
+  - Google Gemini (Google 生态)
 
 ### 2025 AI Enhancements (NEW)
 - **Market Microstructure Analysis**:
