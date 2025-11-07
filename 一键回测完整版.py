@@ -81,6 +81,10 @@ core_packages = {
 ai_packages = {
     'openai': 'openai',
     'anthropic': 'anthropic',
+}
+
+# Google Generative AI (单独处理，因为可能有依赖问题)
+google_ai_package = {
     'google-generativeai': 'google.generativeai',
 }
 
@@ -92,6 +96,15 @@ for package, import_name in core_packages.items():
 print("\n[2/4] 安装 AI/ML 库...")
 for package, import_name in ai_packages.items():
     install_package(package, import_name)
+
+# Google Generative AI (可能有依赖问题，单独处理)
+for package, import_name in google_ai_package.items():
+    try:
+        import_result = install_package(package, import_name)
+        if not import_result:
+            print(f"⚠ {package} 安装失败（不影响其他 LLM 使用）")
+    except Exception as e:
+        print(f"⚠ {package} 检查失败（不影响其他 LLM 使用）")
 
 print("\n[3/4] 安装技术分析库...")
 # TA-Lib 在某些环境中可能无法安装，我们提供备选方案
@@ -143,14 +156,90 @@ from dataclasses import dataclass
 
 warnings.filterwarnings('ignore')
 
+# ==================================================================================
+# 自动检测项目根目录
+# ==================================================================================
+
+def find_project_root():
+    """
+    自动查找项目根目录（包含 src/ 目录的位置）
+
+    查找顺序：
+    1. 脚本所在目录
+    2. 当前工作目录
+    3. 脚本所在目录的父目录（最多向上查找3层）
+    """
+    script_dir = Path(__file__).parent
+    current_dir = Path(os.getcwd())
+
+    # 候选目录列表
+    candidates = [
+        script_dir,                    # 脚本所在目录
+        current_dir,                   # 当前工作目录
+        script_dir.parent,             # 父目录
+        script_dir.parent.parent,      # 祖父目录
+        script_dir.parent.parent.parent,  # 曾祖父目录
+    ]
+
+    for candidate in candidates:
+        src_path = candidate / 'src'
+        if src_path.exists() and src_path.is_dir():
+            # 检查是否包含必要的子目录
+            required_dirs = ['data', 'models', 'agents', 'risk', 'ai']
+            if all((src_path / d).exists() for d in required_dirs):
+                return candidate
+
+    return None
+
+print("正在检测项目路径...")
+project_root = find_project_root()
+
+if project_root is None:
+    print("\n" + "="*80)
+    print("❌ 错误：无法找到项目根目录")
+    print("="*80)
+    print("\n此脚本必须在 AI_Agents_Forex 项目中运行！")
+    print("\n正确的使用方法：")
+    print("\n方法 1（推荐）：")
+    print("  1. 将此脚本复制到 AI_Agents_Forex 项目根目录")
+    print("  2. 在项目根目录运行：")
+    print("     cd AI_Agents_Forex")
+    print("     python 一键回测完整版.py")
+    print("\n方法 2：")
+    print("  1. 从 GitHub 克隆完整项目：")
+    print("     git clone https://github.com/MauveAndromeda/AI_Agents_Forex")
+    print("     cd AI_Agents_Forex")
+    print("     python 一键回测完整版.py")
+    print("\n当前状态：")
+    print(f"  脚本位置: {Path(__file__).absolute()}")
+    print(f"  当前目录: {os.getcwd()}")
+    print(f"  需要的目录结构:")
+    print(f"    AI_Agents_Forex/")
+    print(f"    ├── 一键回测完整版.py  ← 脚本应该在这里")
+    print(f"    └── src/")
+    print(f"        ├── data/")
+    print(f"        ├── models/")
+    print(f"        ├── agents/")
+    print(f"        ├── risk/")
+    print(f"        └── ai/")
+    print("="*80 + "\n")
+    sys.exit(1)
+
+print(f"✓ 找到项目根目录: {project_root}")
+
+# 切换到项目根目录
+os.chdir(project_root)
+print(f"✓ 切换工作目录到: {project_root}")
+
 # 设置路径
-sys.path.insert(0, str(Path(__file__).parent / 'src'))
+sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(project_root / 'src'))
 
 import pandas as pd
 import numpy as np
 
 # ==================================================================================
-# 第三步：导入项目模块（如果导入失败，提供内联实现）
+# 第三步：导入项目模块
 # ==================================================================================
 
 print("正在加载 AI Agents 系统...")
@@ -173,10 +262,22 @@ try:
     MODULES_LOADED = True
 
 except Exception as e:
-    print(f"⚠ 某些模块加载失败: {e}")
-    print("⚠ 请确保在项目根目录运行此脚本")
-    print(f"⚠ 当前目录: {os.getcwd()}")
-    print(f"⚠ 脚本目录: {Path(__file__).parent}")
+    print("\n" + "="*80)
+    print("❌ 错误：AI 组件加载失败")
+    print("="*80)
+    print(f"\n错误详情: {e}")
+    print(f"\n项目根目录: {project_root}")
+    print(f"当前目录: {os.getcwd()}")
+    print(f"\n可能的原因：")
+    print("  1. 项目代码不完整（缺少某些文件）")
+    print("  2. Python 路径配置问题")
+    print("  3. 某些依赖未正确安装")
+    print(f"\n请检查以下目录是否存在：")
+    for module_path in ['src/data', 'src/models', 'src/agents', 'src/risk', 'src/ai']:
+        full_path = project_root / module_path
+        status = "✓" if full_path.exists() else "✗"
+        print(f"  {status} {full_path}")
+    print("="*80 + "\n")
     MODULES_LOADED = False
     sys.exit(1)
 
