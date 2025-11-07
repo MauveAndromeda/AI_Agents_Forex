@@ -501,7 +501,7 @@ class CompleteBacktestEngine:
         # ==========================================
         self.multi_agent_system = MultiAgentTradingSystem(
             llm_client=self.llm_client,
-            min_confidence=0.4
+            min_confidence=0.35  # 降低阈值以允许更多信号通过
         )
         logger.info("✓ [组件 3/8] Multi-Agent System - 4 个专业 Agent")
         logger.info("    • Technical Analyst Agent (技术分析)")
@@ -836,7 +836,8 @@ class CompleteBacktestEngine:
                 adaptive_confidence=adaptive_confidence
             )
 
-            if final_direction == 'HOLD' or final_conviction < 0.4:
+            if final_direction == 'HOLD' or final_conviction < 0.35:
+                logger.debug(f"{symbol}: 最终信号被过滤 - 方向:{final_direction}, 置信度:{final_conviction:.2%}")
                 return None
 
             # ==================================================

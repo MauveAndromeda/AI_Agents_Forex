@@ -606,7 +606,7 @@ class HighSpeedBacktester:
         # 其他组件
         self.multi_agent_system = MultiAgentTradingSystem(
             llm_client=llm_client if self.use_llm else None,
-            min_confidence=0.4
+            min_confidence=0.35  # 降低阈值以允许更多信号通过
         )
         self.microstructure = MarketMicrostructureAnalyzer()
         self.rl_agent = ReinforcementLearningAgent(50, 3, 0.001, 0.95, 0.1)
