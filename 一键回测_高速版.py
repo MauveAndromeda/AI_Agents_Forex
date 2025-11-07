@@ -592,9 +592,20 @@ class HighSpeedBacktester:
             else:
                 return None
 
-            # 仓位大小
-            position_size = self.risk_manager.calculate_position_size(
-                symbol, close, 15, direction
+            # 仓位大小和止损价格
+            stop_loss_pips = 15
+            pip_size = 0.01 if 'JPY' in symbol else 0.0001
+
+            if direction == 'BUY':
+                stop_loss_price = close - (stop_loss_pips * pip_size)
+            else:  # SELL
+                stop_loss_price = close + (stop_loss_pips * pip_size)
+
+            position_size, risk_metrics = self.risk_manager.calculate_position_size(
+                symbol=symbol,
+                entry_price=close,
+                stop_loss_price=stop_loss_price,
+                leverage=self.leverage
             )
 
             if position_size == 0:
@@ -606,7 +617,7 @@ class HighSpeedBacktester:
                 'conviction': conviction,
                 'entry_price': close,
                 'position_size': position_size,
-                'stop_loss_pips': 15,
+                'stop_loss_pips': stop_loss_pips,
                 'take_profit_pips': 30,
             }
 

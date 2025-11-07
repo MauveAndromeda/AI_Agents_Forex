@@ -661,9 +661,7 @@ class CompleteBacktestEngine:
             # 第 3 步: 市场微观结构分析
             # ==================================================
             order_flow = self.microstructure.analyze_order_flow(
-                primary_df,
-                symbol=symbol,
-                timeframe='H1'
+                data  # 传入完整的多时间框架数据字典
             )
 
             # ==================================================
@@ -728,11 +726,18 @@ class CompleteBacktestEngine:
             # ==================================================
             stop_loss_pips = 15  # 50x 杠杆最大止损
 
-            position_size = self.risk_manager.calculate_position_size(
+            # 计算止损价格
+            pip_size = 0.01 if 'JPY' in symbol else 0.0001
+            if final_direction == 'BUY':
+                stop_loss_price = current_price - (stop_loss_pips * pip_size)
+            else:  # SELL
+                stop_loss_price = current_price + (stop_loss_pips * pip_size)
+
+            position_size, risk_metrics = self.risk_manager.calculate_position_size(
                 symbol=symbol,
                 entry_price=current_price,
-                stop_loss_pips=stop_loss_pips,
-                direction=final_direction
+                stop_loss_price=stop_loss_price,
+                leverage=self.leverage
             )
 
             if position_size == 0:
