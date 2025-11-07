@@ -26,49 +26,34 @@ env/
 ENV/
 .venv
 
-# Environment Variables - CRITICAL: Never commit API keys!
-.env
-.env.local
-.env.*.local
-
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# OS
 .DS_Store
-
-# Jupyter
-.ipynb_checkpoints
-*.ipynb
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-
-# Backtest Results
-backtest_results/
-*.csv
-*.png
-*.jpg
+Thumbs.db
 
 # Logs
 *.log
 logs/
 
-# Data files (but not src/data/ directory)
-/data/
-*.h5
-*.pkl
-*.pickle
+# Environment
+.env
+.env.local
+
+# Results
+backtest_results/*.json
+backtest_results/*.csv
+!backtest_results/.gitkeep
+
+# Temporary
+*.tmp
+*.bak
+*.cache
 
 # MT5
-*.exe
-MetaTrader*/
-
-# OS
-Thumbs.db
-.DS_Store
+*.dat

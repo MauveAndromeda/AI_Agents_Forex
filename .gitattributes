@@ -1,0 +1,34 @@
+# Ensure all files are included in ZIP download
+* text=auto
+
+# Include all source directories
+src/** export-ignore=false
+tools/** export-ignore=false
+tests/** export-ignore=false
+
+# Exclude git metadata from ZIP
+.git export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
+
+# Exclude Python cache
+__pycache__/ export-ignore
+*.pyc export-ignore
+*.pyo export-ignore
+*.pyd export-ignore
+
+# Exclude IDE files
+.vscode/ export-ignore
+.idea/ export-ignore
+*.swp export-ignore
+
+# Exclude temporary files
+*.log export-ignore
+.DS_Store export-ignore
+Thumbs.db export-ignore
+
+# Include important docs
+README*.md export-ignore=false
+*.md export-ignore=false
+requirements.txt export-ignore=false
+LICENSE export-ignore=false
