@@ -120,7 +120,7 @@ except Exception as e:
 # ==================================================================================
 
 try:
-    from src.data.simulated_mt5_connector import SimulatedMT5Connector
+    from src.data.simulated_data_generator import SimulatedMT5Connector
     from src.features.alpha_factors import ForexAlphaFactorsOptimized
     from src.ai.unified_llm_client import UnifiedLLMClient, LLMProvider
     from src.agents.trading_agents import MultiAgentTradingSystem, TradeDirection
