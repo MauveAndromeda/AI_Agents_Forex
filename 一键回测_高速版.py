@@ -353,6 +353,145 @@ class ParallelLLMProcessor:
         return response
 
 # ==================================================================================
+# API 密钥配置助手
+# ==================================================================================
+
+def configure_api_key(provider: str = 'openai') -> Optional[str]:
+    """
+    交互式配置 API 密钥
+
+    Args:
+        provider: LLM 提供商 ('openai', 'anthropic', 'deepseek', 'google')
+
+    Returns:
+        配置的 API 密钥，如果用户选择跳过则返回 None
+    """
+    provider_info = {
+        'openai': {
+            'name': 'OpenAI',
+            'env_var': 'OPENAI_API_KEY',
+            'key_prefix': 'sk-',
+            'url': 'https://platform.openai.com/api-keys'
+        },
+        'anthropic': {
+            'name': 'Anthropic',
+            'env_var': 'ANTHROPIC_API_KEY',
+            'key_prefix': 'sk-ant-',
+            'url': 'https://console.anthropic.com/settings/keys'
+        },
+        'deepseek': {
+            'name': 'DeepSeek',
+            'env_var': 'DEEPSEEK_API_KEY',
+            'key_prefix': 'sk-',
+            'url': 'https://platform.deepseek.com/api_keys'
+        },
+        'google': {
+            'name': 'Google',
+            'env_var': 'GOOGLE_API_KEY',
+            'key_prefix': '',
+            'url': 'https://makersuite.google.com/app/apikey'
+        },
+        'gpt': {
+            'name': 'OpenAI',
+            'env_var': 'OPENAI_API_KEY',
+            'key_prefix': 'sk-',
+            'url': 'https://platform.openai.com/api-keys'
+        },
+        'claude': {
+            'name': 'Anthropic',
+            'env_var': 'ANTHROPIC_API_KEY',
+            'key_prefix': 'sk-ant-',
+            'url': 'https://console.anthropic.com/settings/keys'
+        },
+        'gemini': {
+            'name': 'Google',
+            'env_var': 'GOOGLE_API_KEY',
+            'key_prefix': '',
+            'url': 'https://makersuite.google.com/app/apikey'
+        }
+    }
+
+    info = provider_info.get(provider.lower(), provider_info['openai'])
+    env_var = info['env_var']
+
+    # 检查环境变量
+    if os.getenv(env_var):
+        print(f"✓ 已检测到 {env_var}")
+        return os.getenv(env_var)
+
+    # 检查 .env 文件
+    env_file = Path('.env')
+    if env_file.exists():
+        try:
+            with open(env_file, 'r') as f:
+                for line in f:
+                    if line.strip().startswith(env_var):
+                        key = line.split('=', 1)[1].strip()
+                        if key:
+                            print(f"✓ 从 .env 文件读取 {env_var}")
+                            os.environ[env_var] = key
+                            return key
+        except Exception:
+            pass
+
+    # 未找到密钥，提示用户配置
+    print(f"\n{'='*80}")
+    print(f"未检测到 {info['name']} API 密钥")
+    print(f"{'='*80}\n")
+    print(f"📋 获取 API 密钥:")
+    print(f"   1. 访问: {info['url']}")
+    print(f"   2. 创建新的 API 密钥")
+    print(f"   3. 复制密钥\n")
+
+    print("💡 请选择:")
+    print("   [1] 粘贴 API 密钥（仅本次使用）")
+    print("   [2] 粘贴并保存到 .env 文件（推荐）")
+    print("   [3] 跳过（使用纯量化模式，不调用 LLM）\n")
+
+    try:
+        choice = input("请选择 [1/2/3]: ").strip()
+
+        if choice == '3':
+            print("\n✓ 将使用纯量化模式（不调用 LLM API）")
+            return None
+
+        if choice in ['1', '2']:
+            api_key = input(f"\n请粘贴 {info['name']} API 密钥: ").strip()
+
+            if not api_key:
+                print("❌ 密钥为空")
+                return None
+
+            # 验证密钥格式
+            if info['key_prefix'] and not api_key.startswith(info['key_prefix']):
+                print(f"⚠ 警告: 密钥格式可能不正确（应以 {info['key_prefix']} 开头）")
+                confirm = input("是否继续? [y/N]: ").strip().lower()
+                if confirm != 'y':
+                    return None
+
+            # 保存到 .env 文件
+            if choice == '2':
+                try:
+                    with open('.env', 'a') as f:
+                        f.write(f"\n{env_var}={api_key}\n")
+                    print(f"✓ API 密钥已保存到 .env 文件")
+                except Exception as e:
+                    print(f"⚠ 保存失败: {e}，将仅在本次使用")
+
+            # 设置到当前环境
+            os.environ[env_var] = api_key
+            print(f"✓ API 密钥配置成功")
+            return api_key
+
+        else:
+            print("❌ 无效选择")
+            return None
+
+    except (KeyboardInterrupt, EOFError):
+        print("\n\n⚠ 用户取消")
+        return None
+
+# ==================================================================================
 # 高速回测引擎
 # ==================================================================================
 
@@ -402,21 +541,63 @@ class HighSpeedBacktester:
 
         # 根据模式决定是否启用 LLM
         self.use_llm = mode in ['cache', 'fast']
+        llm_client = None  # 初始化为 None
 
         if self.use_llm:
-            try:
-                llm_client = self._create_llm_client(llm_provider)
-                self.llm_agent = AdvancedLLMAgent(llm_client)
-                self.llm_processor = ParallelLLMProcessor(
-                    self.llm_agent,
-                    max_workers=max_workers
-                )
-                print("✓ LLM 系统已启用（高速缓存模式）")
-            except Exception as e:
-                print(f"⚠ LLM 初始化失败: {e}，切换到纯量化模式")
-                self.use_llm = False
-                self.llm_agent = None
-                self.llm_processor = None
+            # 检查并配置 API 密钥
+            env_key_map = {
+                'gpt-5-nano': 'OPENAI_API_KEY',
+                'gpt-4o-mini': 'OPENAI_API_KEY',
+                'gpt-4o': 'OPENAI_API_KEY',
+                'claude-sonnet-4.5': 'ANTHROPIC_API_KEY',
+                'deepseek': 'DEEPSEEK_API_KEY',
+                'gemini': 'GOOGLE_API_KEY',
+            }
+
+            env_key_name = env_key_map.get(llm_provider.lower(), 'OPENAI_API_KEY')
+
+            # 如果环境变量也没有，提示用户配置
+            if not os.getenv(env_key_name):
+                print(f"\n未检测到 {env_key_name}，启动交互式配置...")
+                provider_name = llm_provider.split('-')[0] if '-' in llm_provider else llm_provider
+                api_key = configure_api_key(provider_name.lower())
+
+                # 如果用户选择跳过，切换到纯量化模式
+                if not api_key:
+                    print("✓ 切换到纯量化模式（极速）")
+                    self.use_llm = False
+                    self.llm_agent = None
+                    self.llm_processor = None
+                else:
+                    # 用户提供了 API 密钥，继续初始化 LLM
+                    try:
+                        llm_client = self._create_llm_client(llm_provider)
+                        self.llm_agent = AdvancedLLMAgent(llm_client)
+                        self.llm_processor = ParallelLLMProcessor(
+                            self.llm_agent,
+                            max_workers=max_workers
+                        )
+                        print("✓ LLM 系统已启用（高速缓存模式）")
+                    except Exception as e:
+                        print(f"⚠ LLM 初始化失败: {e}，切换到纯量化模式")
+                        self.use_llm = False
+                        self.llm_agent = None
+                        self.llm_processor = None
+            else:
+                # API 密钥已存在，直接初始化
+                try:
+                    llm_client = self._create_llm_client(llm_provider)
+                    self.llm_agent = AdvancedLLMAgent(llm_client)
+                    self.llm_processor = ParallelLLMProcessor(
+                        self.llm_agent,
+                        max_workers=max_workers
+                    )
+                    print("✓ LLM 系统已启用（高速缓存模式）")
+                except Exception as e:
+                    print(f"⚠ LLM 初始化失败: {e}，切换到纯量化模式")
+                    self.use_llm = False
+                    self.llm_agent = None
+                    self.llm_processor = None
         else:
             print("✓ 纯量化模式（极速）")
             self.llm_agent = None

@@ -296,6 +296,96 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ==================================================================================
+# API 密钥配置助手
+# ==================================================================================
+
+def configure_api_key(provider: str = 'openai') -> Optional[str]:
+    """
+    交互式配置 API 密钥
+
+    Args:
+        provider: API 提供商 ('openai', 'anthropic', 'deepseek', 'google')
+
+    Returns:
+        API 密钥或 None
+    """
+    env_var_map = {
+        'openai': 'OPENAI_API_KEY',
+        'anthropic': 'ANTHROPIC_API_KEY',
+        'deepseek': 'DEEPSEEK_API_KEY',
+        'google': 'GOOGLE_API_KEY'
+    }
+
+    env_var = env_var_map.get(provider.lower(), 'OPENAI_API_KEY')
+
+    # 检查环境变量
+    api_key = os.getenv(env_var)
+    if api_key:
+        print(f"✓ 检测到 {provider.upper()} API 密钥")
+        return api_key
+
+    # 检查 .env 文件
+    env_file = Path('.env')
+    if env_file.exists():
+        try:
+            with open(env_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    if line.startswith(f'{env_var}='):
+                        api_key = line.split('=', 1)[1].strip()
+                        if api_key:
+                            print(f"✓ 从 .env 文件读取 {provider.upper()} API 密钥")
+                            os.environ[env_var] = api_key
+                            return api_key
+        except Exception:
+            pass
+
+    # 提示用户输入
+    print("\n" + "="*80)
+    print(f"⚠️  未找到 {provider.upper()} API 密钥")
+    print("="*80)
+    print(f"\n请选择配置方式：")
+    print(f"  1. 粘贴 API 密钥（临时使用）")
+    print(f"  2. 保存到 .env 文件（推荐）")
+    print(f"  3. 跳过（使用纯量化模式）")
+
+    choice = input("\n请选择 (1/2/3): ").strip()
+
+    if choice == '3':
+        print("✓ 将使用纯量化模式（不调用 LLM API）")
+        return None
+
+    print(f"\n请粘贴你的 {provider.upper()} API 密钥:")
+    print(f"（格式示例: sk-proj-... 或 sk-...）")
+    api_key = input("API Key: ").strip()
+
+    if not api_key:
+        print("⚠️  未输入 API 密钥，将使用纯量化模式")
+        return None
+
+    # 验证格式
+    if provider == 'openai' and not api_key.startswith('sk-'):
+        print("⚠️  警告：OpenAI API 密钥通常以 'sk-' 开头")
+        confirm = input("确定要使用此密钥吗？(y/n): ").strip().lower()
+        if confirm != 'y':
+            return None
+
+    # 保存到环境变量
+    os.environ[env_var] = api_key
+
+    # 保存到 .env 文件
+    if choice == '2':
+        try:
+            with open('.env', 'a', encoding='utf-8') as f:
+                f.write(f"\n{env_var}={api_key}\n")
+            print(f"✓ API 密钥已保存到 .env 文件")
+        except Exception as e:
+            print(f"⚠️  保存失败: {e}，密钥仅在本次会话有效")
+    else:
+        print(f"✓ API 密钥已设置（仅本次会话有效）")
+
+    return api_key
+
+# ==================================================================================
 # 完整回测引擎类
 # ==================================================================================
 
@@ -371,9 +461,37 @@ class CompleteBacktestEngine:
         # ==========================================
         # 组件 3: LLM 客户端
         # ==========================================
+        # 检查并配置 API 密钥
+        if not api_key:
+            # 根据提供商确定需要的环境变量
+            env_key_map = {
+                'gpt-5-nano': 'OPENAI_API_KEY',
+                'gpt-4o-mini': 'OPENAI_API_KEY',
+                'gpt-4o': 'OPENAI_API_KEY',
+                'gpt-4': 'OPENAI_API_KEY',
+                'claude-sonnet-4.5': 'ANTHROPIC_API_KEY',
+                'claude-3.5-sonnet': 'ANTHROPIC_API_KEY',
+                'claude-3-opus': 'ANTHROPIC_API_KEY',
+                'deepseek': 'DEEPSEEK_API_KEY',
+                'gemini': 'GOOGLE_API_KEY',
+                'gemini-pro': 'GOOGLE_API_KEY',
+            }
+
+            env_key_name = env_key_map.get(llm_provider.lower(), 'OPENAI_API_KEY')
+
+            # 如果环境变量也没有，提示用户配置
+            if not os.getenv(env_key_name):
+                logger.info(f"\n未检测到 {env_key_name}，启动交互式配置...")
+                provider_name = llm_provider.split('-')[0] if '-' in llm_provider else llm_provider
+                api_key = configure_api_key(provider_name.lower())
+
         try:
-            self.llm_client = self._create_llm_client(llm_provider, api_key)
-            logger.info(f"✓ [组件 2/8] LLM 客户端 - {llm_provider}")
+            if api_key or os.getenv('OPENAI_API_KEY') or os.getenv('ANTHROPIC_API_KEY') or os.getenv('DEEPSEEK_API_KEY') or os.getenv('GOOGLE_API_KEY'):
+                self.llm_client = self._create_llm_client(llm_provider, api_key)
+                logger.info(f"✓ [组件 2/8] LLM 客户端 - {llm_provider}")
+            else:
+                logger.info("✓ [组件 2/8] 纯量化模式 - 不使用 LLM")
+                self.llm_client = None
         except Exception as e:
             logger.warning(f"LLM 初始化失败: {e}，将使用纯量化模式")
             self.llm_client = None

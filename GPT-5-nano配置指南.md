@@ -84,9 +84,33 @@ python 一键回测_高速版.py --mode cache --llm gpt-4o-mini
 4. 点击 "Create new secret key"
 5. 复制密钥（格式：`sk-proj-...` 或 `sk-...`）
 
-### 步骤 2: 配置密钥（3 种方式）
+### 步骤 2: 配置密钥（4 种方式）
 
-#### 方式 A: .env 文件（推荐）✅
+#### 方式 A: 交互式配置（最简单）✅ **新功能！**
+
+直接运行回测脚本，系统会自动检测 API 密钥：
+
+```bash
+python 一键回测完整版.py
+```
+
+**如果未检测到 API 密钥，会提示：**
+```
+未检测到 OPENAI_API_KEY，启动交互式配置...
+
+请选择:
+  [1] 粘贴 API 密钥（仅本次使用）
+  [2] 粘贴并保存到 .env 文件（推荐）
+  [3] 跳过（使用纯量化模式，不调用 LLM）
+```
+
+**优势**：
+- 无需手动创建 .env 文件
+- 自动验证密钥格式
+- 可选择临时或永久保存
+- 支持纯量化模式（不使用 LLM）
+
+#### 方式 B: .env 文件（传统方式）
 
 在项目根目录创建 `.env` 文件：
 
@@ -110,7 +134,7 @@ ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-#### 方式 B: 系统环境变量
+#### 方式 C: 系统环境变量
 
 **Windows (PowerShell)**:
 ```powershell
@@ -136,11 +160,13 @@ echo 'export OPENAI_API_KEY="sk-your-key-here"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-#### 方式 C: 命令行参数
+#### 方式 D: 命令行参数
 
 ```bash
 python 一键回测完整版.py --api-key sk-your-key-here
 ```
+
+**注意**: 不推荐此方式，因为命令行参数可能被记录到历史文件中。
 
 ---
 

@@ -48,12 +48,21 @@ class OpenAIClient(BaseLLMClient):
 
     def generate(self, prompt: str, temperature: float = 0.7, max_tokens: int = 1000) -> str:
         try:
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=temperature,
-                max_tokens=max_tokens
-            )
+            # GPT-5 系列使用 max_completion_tokens，GPT-4 系列使用 max_tokens
+            if self.model.startswith('gpt-5'):
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=temperature,
+                    max_completion_tokens=max_tokens  # GPT-5 新参数
+                )
+            else:
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=temperature,
+                    max_tokens=max_tokens  # GPT-4 及更早版本
+                )
             return response.choices[0].message.content
         except Exception as e:
             logger.error(f"OpenAI API error: {e}")
