@@ -440,8 +440,8 @@ class EnhancedRealBacktestEngine:
         # 组件 6: 强化学习 Agent
         # ==========================================
         self.rl_agent = ReinforcementLearningAgent(
-            state_size=50,
-            action_size=3,
+            state_dim=50,
+            action_space=3,
             learning_rate=0.001,
             gamma=0.95,
             epsilon=0.1

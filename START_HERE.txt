@@ -1,63 +1,61 @@
 ================================================================================
-  AI Agents Forex - 智能外汇交易回测系统
+  AI Agents Forex - Forex Trading Backtest System
 ================================================================================
 
-欢迎！这是一个完整的 AI 驱动外汇交易回测系统。
+This is a forex trading backtest system with AI components.
 
-🚀 快速开始（3步）：
+Quick Start (3 steps):
 
-  步骤 1: 确认已解压到简单路径
-          推荐: C:\AI_Agents_Forex
-          避免: 包含括号或空格的复杂路径
+  Step 1: Extract to a simple path
+          Recommended: C:\AI_Agents_Forex
+          Avoid: Paths with parentheses or spaces
 
-  步骤 2: 双击运行 "一键安装运行.py"
-          或在终端运行: python 一键安装运行.py
+  Step 2: Run "一键安装运行.py"
+          Or in terminal: python 一键安装运行.py
 
-  步骤 3: 选择 [1] 真实回测 5 年增强版
+  Step 3: Select [1] 5-Year Enhanced Backtest
 
-  就这样！系统会自动：
-  ✓ 安装所有依赖
-  ✓ 检查环境
-  ✓ 开始回测
-
-================================================================================
-
-📚 完整文档：
-
-  • 快速开始.md              - 5分钟上手指南
-  • 使用说明_ZIP下载用户.md   - ZIP用户专用
-  • README_简体中文.md         - 完整中文文档
-  • 项目结构说明.md            - 项目结构详解
+  The system will:
+  - Install dependencies
+  - Check environment
+  - Start backtest
 
 ================================================================================
 
-🆘 遇到问题？
+Documentation:
 
-  问题: "找不到 Python"
-  解决: 安装 Python 3.8+ https://www.python.org/downloads/
-
-  问题: "缺少必要目录 src"
-  解决: 重新下载完整的 ZIP 并完全解压
-
-  问题: "No module named 'src.xxx'"
-  解决: 已修复！重新下载最新 ZIP
-
-  问题: API 密钥配置
-  解决: 运行 check_api_key.py 诊断
+  • 快速开始.md              - Quick start guide
+  • 使用说明_ZIP下载用户.md   - ZIP download users guide
+  • README_简体中文.md         - Full Chinese documentation
+  • 项目结构说明.md            - Project structure
 
 ================================================================================
 
-💡 提示：
+Common Issues:
 
-  - 第一次运行会自动安装依赖（需要1-2分钟）
-  - 可以选择纯量化模式（不需要API密钥，完全免费）
-  - 回测结果保存在 backtest_results/ 目录
+  Issue: "Python not found"
+  Fix: Install Python 3.8+ from https://www.python.org/downloads/
+
+  Issue: "Missing src directory"
+  Fix: Re-download complete ZIP and extract fully
+
+  Issue: "No module named 'src.xxx'"
+  Fix: Re-download latest ZIP (this has been fixed)
+
+  Issue: API key configuration
+  Fix: Run check_api_key.py for diagnosis
 
 ================================================================================
 
-🌟 GitHub: https://github.com/MauveAndromeda/AI_Agents_Forex
-📧 问题反馈: 在 GitHub 提交 Issue
+Notes:
 
-祝你回测顺利！🚀
+  - First run installs dependencies (1-2 minutes)
+  - Can use quantitative mode (no API key required, free)
+  - Results saved in backtest_results/ directory
+
+================================================================================
+
+GitHub: https://github.com/MauveAndromeda/AI_Agents_Forex
+Issues: Submit on GitHub
 
 ================================================================================

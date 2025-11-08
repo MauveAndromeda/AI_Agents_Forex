@@ -609,7 +609,13 @@ class HighSpeedBacktester:
             min_confidence=0.35  # 降低阈值以允许更多信号通过
         )
         self.microstructure = MarketMicrostructureAnalyzer()
-        self.rl_agent = ReinforcementLearningAgent(50, 3, 0.001, 0.95, 0.1)
+        self.rl_agent = ReinforcementLearningAgent(
+            state_dim=50,
+            action_space=3,
+            learning_rate=0.001,
+            gamma=0.95,
+            epsilon=0.1
+        )
         self.adaptive_system = AdaptiveLearningSystem()
         self.risk_manager = HighLeverageRiskManager(
             initial_balance, leverage, 0.005, 2, 0.02, 0.05
