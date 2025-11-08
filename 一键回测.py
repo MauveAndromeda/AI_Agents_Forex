@@ -353,11 +353,14 @@ class CompleteBacktestEngine:
             print(f"{'='*60}")
 
             # 获取数据
-            df = self.data_connector.get_historical_data(
+            # 计算需要的K线数量：5年 * 365天 * 24小时 = 43,800根（H1）
+            bars_needed = self.duration_days * 24
+
+            df = self.data_connector.get_data(
                 symbol=symbol,
                 timeframe='H1',
-                start_date=start_date,
-                end_date=end_date
+                bars=bars_needed,
+                start_date=start_date
             )
 
             if df is None or len(df) < 100:
@@ -371,7 +374,7 @@ class CompleteBacktestEngine:
             for i in range(100, len(df), 24):  # 每天检查一次
                 try:
                     current_data = df.iloc[:i]
-                    current_price = df.iloc[i]['close']
+                    current_price = df.iloc[i]['Close']  # 注意：数据列名是大写
 
                     # 生成交易信号
                     signal = self._generate_signal(symbol, current_data, current_price)
@@ -445,11 +448,39 @@ class CompleteBacktestEngine:
             return None
 
     def _calculate_alpha_score(self, data: pd.DataFrame) -> float:
-        """计算 Alpha 分数"""
+        """
+        计算 Alpha 分数
+        使用简单的技术指标：动量 + RSI
+        """
         try:
-            factors = self.alpha_factors.calculate(data)
-            return factors.get('composite_score', 0.0)
-        except:
+            if len(data) < 20:
+                return 0.0
+
+            # 计算动量（最近收盘价相对于20周期均价）
+            close_prices = data['Close'].values
+            momentum = (close_prices[-1] - close_prices[-20:].mean()) / close_prices[-20:].mean()
+
+            # 计算简化的RSI指标
+            price_changes = np.diff(close_prices[-15:])
+            gains = price_changes[price_changes > 0].sum()
+            losses = abs(price_changes[price_changes < 0].sum())
+
+            if losses == 0:
+                rsi = 100
+            else:
+                rs = gains / losses
+                rsi = 100 - (100 / (1 + rs))
+
+            # 综合分数：动量权重0.6，RSI权重0.4
+            # RSI转换：(RSI - 50) / 50，范围 [-1, 1]
+            rsi_normalized = (rsi - 50) / 50
+
+            composite_score = 0.6 * momentum + 0.4 * rsi_normalized
+
+            # 限制在 [-1, 1] 范围内
+            return max(-1.0, min(1.0, composite_score))
+
+        except Exception as e:
             return 0.0
 
     def _execute_trade(self, symbol: str, signal: Dict, entry_price: float, confidence: float) -> Optional[Dict]:
