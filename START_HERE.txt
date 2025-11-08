@@ -4,21 +4,20 @@
 
 This is a forex trading backtest system with AI components.
 
-Quick Start (3 steps):
+Quick Start (2 steps):
 
   Step 1: Extract to a simple path
           Recommended: C:\AI_Agents_Forex
           Avoid: Paths with parentheses or spaces
 
-  Step 2: Run "一键安装运行.py"
-          Or in terminal: python 一键安装运行.py
-
-  Step 3: Select [1] 5-Year Enhanced Backtest
+  Step 2: Run "一键回测.py"
+          Command: python 一键回测.py
 
   The system will:
-  - Install dependencies
-  - Check environment
-  - Start backtest
+  - Automatically install dependencies
+  - Configure API key (optional)
+  - Run complete backtest with real data
+  - Generate detailed report
 
 ================================================================================
 
@@ -43,7 +42,7 @@ Common Issues:
   Fix: Re-download latest ZIP (this has been fixed)
 
   Issue: API key configuration
-  Fix: Run check_api_key.py for diagnosis
+  Fix: Run the script, it will guide you through API setup
 
 ================================================================================
 
